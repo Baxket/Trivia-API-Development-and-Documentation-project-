@@ -1,7 +1,7 @@
 # The Trivia App of Udacity 
 
 This is an API development and documentation project project for udacity students to test their skills learnt in the course of the fullstack nanodegree program. What this API does is to play a quiz game where users can add a quiz question and answer to the database categorizing them, search for any question with their answer and also play a quiz based on categories. After this app I hava accomplished how to build well formatted API endpoints and test it. 
-This project adheres to the PEP8 style guidelines.
+This project adheres to the[ PEP8 style guidelines]([https://link-url-here.org](https://peps.python.org/pep-0008/)).
 
 
 ## API Reference
