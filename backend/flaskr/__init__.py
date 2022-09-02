@@ -76,18 +76,20 @@ def create_app(test_config=None):
     def get_questions():
         try:
 
-          page = request.args.get('page',1,type=int)
+          page = request.args.get('page',1,type=int)# creates the pages
           start = (page-1)*10
           end = start + 10
-          questions = Question.query.all()
-          formatted_questions = [question.format() for question in questions]
+
+          questions = Question.query.all()# fetch all the questions
+          formatted_questions = [question.format() for question in questions] # formats qustions into a dictionary
           if len(formatted_questions[start:end]) == 0:
+                #give error if no question if found
                 abort(404)
                 
-          categories = Category.query.all()
+          categories = Category.query.all()# get all categories
           data = {}
           for category in categories:
-             data[category.id] = category.type
+             data[category.id] = category.type # format categories into a dictionary
   
   
           return jsonify({
@@ -113,9 +115,9 @@ def create_app(test_config=None):
     @app.route('/questions/<int:id>', methods=['DELETE'])
     def delete_question(id):
         try:
-          question = Question.query.filter_by(id=id).one_or_none()
+          question = Question.query.filter_by(id=id).one_or_none()# fetch the questions based on category
 
-          if question is None:
+          if question is None:#give error if no question if found
                 abort(422)
           else:
             question.delete()
@@ -142,23 +144,25 @@ def create_app(test_config=None):
     @app.route('/questions', methods=['POST'])
     def add_question():
 
-             
+        # get the requested argumnents     
         body = request.get_json()
         question = body.get('question', None)
         answer = body.get('answer', None)
         difficulty = body.get('difficulty', None)
         category = body.get('category', None)
+
         try:
 
           if(question is None or 
              answer is None or 
              difficulty is None or
-              category is None):
+              category is None): #give error if argumnets are not given
                 abort(404)
 
          
-          if((question != "" and question.isspace()==False)  or ( answer != "" and answer.isspace()==False)):
-  
+          if((question != "" and question.isspace()==False) or 
+            ( answer != "" and answer.isspace()==False)): #give error if arguments has only space or nothing
+            #add a new question
               new_question = Question(
                   question=question,
                   answer=answer,
@@ -194,10 +198,12 @@ def create_app(test_config=None):
             body = request.get_json()
             search_term = body.get('searchTerm',None)
 
+            #give error if arguments has only space or nothing
+            
             if(search_term is None or search_term.isspace() or search_term=="" ):
                 abort(404)
             
-            result = Question.query.filter(Question.question.ilike('%'+ search_term +'%'))
+            result = Question.query.filter(Question.question.ilike('%'+ search_term +'%')) # search from database
             formatted_questions = [question.format() for question in result]
             return jsonify({
                 'success':True,
@@ -328,6 +334,7 @@ def create_app(test_config=None):
     Create error handlers for all expected errors
     including 404 and 422.
     """
+    #errors
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
